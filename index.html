@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La ruta de la u · Integrales por sustitución</title>
+<meta name="description" content="Práctica adaptativa de integrales por sustitución: los ejercicios se ajustan a tu nivel.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<style>
+:root{
+  --bg:#0b1020; --ink:#eef1ff; --muted:#a9b0d6; --line:rgba(255,255,255,.12);
+  --glass:rgba(255,255,255,.06); --amber:#ffb454; --teal:#6ee7d8; --pink:#ff6b9a;
+  --ok:#4ade80; --bad:#ff7b7b; --serif:Fraunces,Georgia,"Times New Roman",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;min-height:100vh;overflow-x:hidden}
+[hidden]{display:none!important}
+.bg{position:fixed;inset:0;z-index:-2;background:
+  radial-gradient(60rem 40rem at 8% -10%,rgba(124,92,255,.32),transparent 60%),
+  radial-gradient(50rem 40rem at 105% 8%,rgba(20,184,166,.28),transparent 60%),
+  radial-gradient(45rem 30rem at 50% 115%,rgba(249,115,22,.22),transparent 60%),
+  linear-gradient(180deg,#0b1020,#0d1228)}
+.glyphs{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.glyph{position:absolute;bottom:-12vh;font-family:var(--serif);color:#fff;opacity:.06;animation:drift linear infinite;will-change:transform}
+@keyframes drift{from{transform:translateY(0) rotate(0)}to{transform:translateY(-125vh) rotate(28deg)}}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* ---------- Hero ---------- */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+.logo{font-family:var(--serif);font-weight:800;font-size:1.25rem;letter-spacing:.2px;display:flex;align-items:center;gap:10px}
+.logo i{font-style:normal;display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--amber),var(--pink));color:#1a1030;font-size:1.2rem}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:34px 0 70px}
+.kicker{display:inline-flex;gap:8px;align-items:center;padding:6px 12px;border:1px solid var(--line);border-radius:99px;background:var(--glass);color:var(--teal);font-size:.82rem;font-weight:600;letter-spacing:.3px}
+h1{font-family:var(--serif);font-weight:800;font-size:clamp(2.4rem,6.2vw,4.4rem);line-height:1.04;margin:18px 0 18px;letter-spacing:-.5px}
+h1 em{font-style:normal;background:linear-gradient(100deg,var(--amber),var(--pink) 60%,#b794ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);font-size:1.12rem;max-width:34rem}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;align-items:center}
+.btn{appearance:none;border:0;cursor:pointer;font:inherit;font-weight:700;padding:14px 24px;border-radius:14px;transition:transform .15s,box-shadow .2s,background .2s;text-decoration:none;display:inline-flex;align-items:center;gap:10px}
+.btn:focus-visible,.opt:focus-visible,.link:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+.btn.primary{background:linear-gradient(135deg,var(--amber),#ff8a5b);color:#2a1300;box-shadow:0 10px 30px -8px rgba(255,138,91,.6)}
+.btn.primary:hover{transform:translateY(-2px);box-shadow:0 16px 36px -8px rgba(255,138,91,.75)}
+.btn.ghost{background:var(--glass);color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{background:rgba(255,255,255,.12)}
+.link{background:none;border:0;color:var(--muted);cursor:pointer;font:inherit;text-decoration:underline;text-underline-offset:3px}
+.link:hover{color:var(--ink)}
+.stage{position:relative;border:1px solid var(--line);border-radius:26px;padding:26px 22px;background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.03));backdrop-filter:blur(8px);box-shadow:0 30px 60px -30px rgba(0,0,0,.7);min-height:300px;display:flex;flex-direction:column;justify-content:space-between}
+.stage .dots{display:flex;gap:7px}
+.stage .dots b{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2);transition:.3s}
+.stage .dots b.on{background:var(--amber);transform:scale(1.25)}
+.demo{position:relative;height:150px}
+.demo>div{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:translateY(12px) scale(.98);transition:opacity .6s,transform .6s;font-size:1.55rem}
+.demo>div.on{opacity:1;transform:none}
+.cap{color:var(--teal);font-weight:600;font-size:.95rem;min-height:1.5em}
+.u-chip{position:absolute;right:-10px;top:-14px;font-family:var(--serif);font-weight:800;font-size:1.7rem;width:54px;height:54px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,var(--teal),#7c5cff);color:#0b1020;transform:rotate(8deg);box-shadow:0 12px 30px -8px rgba(110,231,216,.6);animation:bob 3.4s ease-in-out infinite}
+@keyframes bob{50%{transform:rotate(-4deg) translateY(-6px)}}
+
+/* ---------- Sections ---------- */
+section.block{padding:40px 0 70px}
+h2{font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.5rem);line-height:1.1;margin-bottom:10px;letter-spacing:-.3px}
+.sub{color:var(--muted);max-width:40rem;margin-bottom:30px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:22px}
+.card .ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:1.3rem;margin-bottom:14px;background:linear-gradient(135deg,rgba(255,180,84,.25),rgba(255,107,154,.25))}
+.card h3{font-size:1.05rem;margin-bottom:6px}
+.card p{color:var(--muted);font-size:.95rem}
+.route{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:l}
+.route li{position:relative;background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:20px 20px 16px;overflow:hidden;transition:transform .2s,border-color .2s}
+.route li:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.3)}
+.route .num{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;font-weight:800;font-family:var(--serif);background:rgba(255,255,255,.1);margin-bottom:10px}
+.route li.cur{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber),0 20px 40px -20px rgba(255,180,84,.5)}
+.route li.cur .num{background:var(--amber);color:#2a1300}
+.route li.done .num{background:var(--ok);color:#052e16}
+.route h3{font-size:1.05rem;margin-bottom:4px}
+.route p{color:var(--muted);font-size:.88rem;margin-bottom:10px;min-height:2.6em}
+.route .ex{font-size:.95rem;padding:10px;border-radius:12px;background:rgba(0,0,0,.25);overflow-x:auto}
+.cta-end{text-align:center;padding:30px 0 70px}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;padding:24px 0 40px;text-align:center}
+
+/* ---------- Game ---------- */
+.game{max-width:860px;margin:0 auto;padding:18px 20px 70px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.badge{display:flex;align-items:center;gap:12px}
+.badge .n{font-family:var(--serif);font-weight:800;font-size:1.4rem;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--amber),var(--pink));color:#1a1030;transition:transform .4s}
+.badge .n.pop{animation:pop .6s}
+@keyframes pop{40%{transform:scale(1.35) rotate(-6deg)}}
+.badge b{display:block;font-size:1.05rem}
+.badge small{color:var(--muted)}
+.hud{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.pips{display:flex;gap:6px;align-items:center}
+.pips span{width:26px;height:10px;border-radius:99px;background:rgba(255,255,255,.14);transition:.3s}
+.pips span.on{background:linear-gradient(90deg,var(--teal),var(--ok));box-shadow:0 0 12px rgba(110,231,216,.6)}
+.stat{color:var(--muted);font-size:.9rem}
+.stat b{color:var(--ink)}
+.mini{display:flex;gap:6px;margin:0 0 18px}
+.mini i{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.12)}
+.mini i.done{background:var(--ok)} .mini i.cur{background:var(--amber)}
+.panel{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:24px;padding:26px;box-shadow:0 30px 60px -35px rgba(0,0,0,.8)}
+.ask{display:flex;justify-content:space-between;gap:10px;align-items:center;color:var(--muted);font-size:.92rem;margin-bottom:6px;flex-wrap:wrap}
+.problem{font-size:clamp(1.3rem,3.6vw,1.9rem);padding:22px 8px;text-align:center;overflow-x:auto}
+.hintbox{margin:2px auto 18px;text-align:center;color:var(--amber);min-height:1.6em}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{appearance:none;font:inherit;color:inherit;text-align:left;cursor:pointer;display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.06);border:1.5px solid var(--line);min-height:76px;transition:transform .15s,border-color .2s,background .2s}
+.opt:hover:not(:disabled){transform:translateY(-2px);border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.1)}
+.opt .k{flex:none;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:.85rem;background:rgba(255,255,255,.12)}
+.opt .m{flex:1;overflow-x:auto;overflow-y:hidden;font-size:1.05rem}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--ok);background:rgba(74,222,128,.14)}
+.opt.right .k{background:var(--ok);color:#052e16}
+.opt.wrong{border-color:var(--bad);background:rgba(255,123,123,.13);animation:shake .4s}
+.opt.wrong .k{background:var(--bad);color:#3b0505}
+.opt.dim{opacity:.55}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.actions{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:10px;flex-wrap:wrap}
+.fb{margin-top:18px;border-radius:18px;padding:18px 20px;border:1px solid var(--line);background:rgba(0,0,0,.22)}
+.fb h3{font-size:1.1rem;margin-bottom:4px}
+.fb.good h3{color:var(--ok)} .fb.bad h3{color:var(--bad)}
+.fb .why{color:#ffd7d7;margin-bottom:8px}
+.fb ol{list-style:none;margin-top:10px;display:grid;gap:8px}
+.fb li{display:grid;gap:2px;padding:8px 12px;border-left:3px solid var(--teal);background:rgba(255,255,255,.04);border-radius:0 12px 12px 0}
+.fb li .st{font-size:.8rem;color:var(--teal);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.fb li .stm{overflow-x:auto;overflow-y:hidden}
+.lvl{margin-top:12px;padding:10px 14px;border-radius:12px;font-weight:600}
+.lvl.up{background:rgba(74,222,128,.15);color:var(--ok)} .lvl.down{background:rgba(255,180,84,.15);color:var(--amber)}
+.next{margin-top:14px;display:flex;justify-content:flex-end}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,30px);opacity:0;background:#fff;color:#16143a;padding:12px 20px;border-radius:14px;font-weight:700;box-shadow:0 20px 40px -10px rgba(0,0,0,.6);transition:.4s;z-index:20;pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.finale{position:fixed;inset:0;z-index:30;background:rgba(7,10,25,.86);backdrop-filter:blur(6px);display:grid;place-items:center;padding:20px}
+.finale .box{max-width:520px;text-align:center;background:linear-gradient(160deg,#241a52,#10183a);border:1px solid var(--line);border-radius:28px;padding:36px 28px;position:relative;z-index:2}
+.finale h2{font-size:2.2rem}
+.finale p{color:var(--muted);margin:10px 0 22px}
+.conf{position:fixed;top:-20px;width:10px;height:16px;z-index:31;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(112vh) rotate(720deg)}}
+.katex{font-size:1.08em}
+
+@media(max-width:860px){
+  .hero{grid-template-columns:1fr;padding-bottom:40px}
+  .cards,.route{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){
+  .cards,.route,.opts{grid-template-columns:1fr}
+  .panel{padding:18px}
+  .u-chip{right:6px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="glyphs" id="glyphs" aria-hidden="true"></div>
+
+<!-- ===================== PORTADA ===================== -->
+<main id="landing">
+  <div class="wrap">
+    <nav class="nav">
+      <div class="logo"><i>∫</i> La ruta de la u</div>
+      <button class="link" id="resetTop" hidden>Reiniciar progreso</button>
+    </nav>
+
+    <header class="hero">
+      <div>
+        <span class="kicker">✦ Cálculo integral · práctica adaptativa</span>
+        <h1>Dale un <em>nuevo nombre</em> a la integral.</h1>
+        <p class="lead">Con la sustitución, lo enredado se vuelve simple: eliges <b>u</b>, cambias de variable y la integral se rinde. Aquí practicas con ejercicios que <b>suben o bajan de dificultad</b> según cómo vayas respondiendo.</p>
+        <div class="cta">
+          <button class="btn primary" id="start">Comenzar el ascenso <span aria-hidden="true">→</span></button>
+          <a class="btn ghost" href="#como">Cómo funciona</a>
+        </div>
+        <p style="margin-top:14px"><button class="link" id="fresh" hidden>Empezar de cero</button></p>
+      </div>
+
+      <div class="stage" aria-label="Ejemplo animado de sustitución">
+        <div class="u-chip" aria-hidden="true">u</div>
+        <div class="dots" id="dots"><b class="on"></b><b></b><b></b><b></b></div>
+        <div class="demo" id="demo"></div>
+        <div class="cap" id="cap"></div>
+      </div>
+    </header>
+  </div>
+
+  <div class="wrap">
+    <section class="block" id="como">
+      <h2>Tres ideas, cero relleno</h2>
+      <p class="sub">No es una lista fija de ejercicios: la aplicación decide cuál te toca según tus respuestas.</p>
+      <div class="cards">
+        <div class="card"><div class="ic">◎</div><h3>Ejercicios nuevos cada vez</h3><p>Los números cambian en cada intento. Nunca vas a ver dos veces el mismo ejercicio, así que no sirve memorizar respuestas.</p></div>
+        <div class="card"><div class="ic">⇅</div><h3>Sube con 3 aciertos seguidos</h3><p>Tres aciertos seguidos te llevan al siguiente nivel. Dos errores seguidos te devuelven un escalón para reforzar.</p></div>
+        <div class="card"><div class="ic">✦</div><h3>Cada error te dice por qué</h3><p>Las opciones incorrectas son errores típicos. Al elegir una, te explica exactamente qué pasó y te muestra el procedimiento completo.</p></div>
+      </div>
+    </section>
+
+    <section class="block" id="ruta">
+      <h2>La ruta: 6 niveles</h2>
+      <p class="sub">Empiezas con la forma más sencilla, ∫ f(x)·f′(x) dx, y terminas con composiciones que parecen imposibles hasta que ves la u.</p>
+      <ol class="route" id="route"></ol>
+    </section>
+
+    <div class="cta-end">
+      <button class="btn primary" id="start2">Subir al nivel 1 <span aria-hidden="true">→</span></button>
+    </div>
+  </div>
+  <footer><div class="wrap">Práctica de Cálculo Integral · Prototipo · Todo ocurre en tu navegador; el progreso se guarda solo en este dispositivo.</div></footer>
+</main>
+
+<!-- ===================== PRÁCTICA ===================== -->
+<main id="gameView" class="game" hidden>
+  <div class="topbar">
+    <div class="badge">
+      <div class="n" id="lvN">1</div>
+      <div><b id="lvName">Chispa</b><small id="lvDesc"></small></div>
+    </div>
+    <div class="hud">
+      <div class="pips" id="pips" title="Aciertos seguidos para subir"><span></span><span></span><span></span></div>
+      <div class="stat">Aciertos <b id="stOk">0</b>/<b id="stTot">0</b></div>
+      <button class="link" id="home">← Inicio</button>
+    </div>
+  </div>
+  <div class="mini" id="mini" aria-hidden="true"></div>
+
+  <div class="panel">
+    <div class="ask"><span>Calcula la integral</span><button class="btn ghost" id="hintBtn" style="padding:8px 14px;font-size:.9rem">💡 Pista</button></div>
+    <div class="problem" id="problem"></div>
+    <div class="hintbox" id="hint" aria-live="polite"></div>
+    <div class="opts" id="opts"></div>
+    <div id="fbWrap" aria-live="polite"></div>
+    <div class="next"><button class="btn primary" id="nextBtn" hidden>Siguiente →</button></div>
+  </div>
+  <p class="stat" style="margin-top:14px;text-align:center">Atajos: teclas <b>1–4</b> (o A–D) para responder · <b>Enter</b> para continuar · Si usas la pista, un acierto no suma a tu racha.</p>
+</main>
+
+<div class="finale" id="finale" hidden>
+  <div class="box">
+    <div style="font-size:3rem">🏔️</div>
+    <h2>¡Llegaste a la cima!</h2>
+    <p>Dominaste el nivel Leyenda: tres aciertos seguidos en las composiciones más astutas. Ya sabes ver la u donde otros ven un enredo.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn primary" id="keep">Seguir practicando</button>
+      <button class="btn ghost" id="goHome">Volver al inicio</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/*GEN-START*/
+const T=String.raw;
+const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const pick=a=>a[rnd(0,a.length-1)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(0,i);[a[i],a[j]]=[a[j],a[i]];}return a;};
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+const fr=(n,d=1)=>{if(d<0){n=-n;d=-d;}const g=gcd(n,d)||1;return [n/g,d/g];};
+const frMul=(a,b)=>fr(a[0]*b[0],a[1]*b[1]);
+const frVal=a=>a[0]/a[1];
+const frEq=(a,b)=>a[0]===b[0]&&a[1]===b[1];
+const sgn=k=>k>0?'+'+k:k<0?'-'+(-k):'';
+const xp=m=>m===1?'x':T`x^{${m}}`;
+const xm1=m=>m===1?'':m===2?'x':T`x^{${m-1}}`;
+const polyT=(a,m,k)=>(a===1?'':String(a))+xp(m)+sgn(k);
+const coefTex=f=>{const [n,d]=f;if(n===1&&d===1)return'';if(n===-1&&d===1)return'-';if(d===1)return String(n);return (n<0?'-':'')+T`\frac{${Math.abs(n)}}{${d}}`;};
+const joinC=(f,base)=>{const c=coefTex(f);if(!c)return base;if(c==='-')return '-'+base;if(base.startsWith('\\frac'))return c+T`\cdot `+base;return c+base;};
+
+/* ---------- Niveles 1 y 2: ∫ gⁿ·g′ dx ---------- */
+function kindGG(){
+  const t=pick(['poly','poly','sin','cos','ln']);
+  if(t==='poly'){
+    const m=pick([2,3,4]),k=rnd(1,9)*(Math.random()<.5?-1:1);
+    const g=T`x^{${m}}${sgn(k)}`,gp=`${m}${xm1(m)}`;
+    const pw=n=>n===1?T`\left(${g}\right)`:T`\left(${g}\right)^{${n}}`;
+    return {g,gp,pw,prod:n=>gp+pw(n),gf:x=>Math.pow(x,m)+k,gpf:x=>m*Math.pow(x,m-1)};
+  }
+  if(t==='sin'){
+    const pw=n=>n===1?T`\sin x`:T`\sin^{${n}}x`;
+    return {g:T`\sin x`,gp:T`\cos x`,pw,prod:n=>pw(n)+T`\cos x`,gf:Math.sin,gpf:Math.cos};
+  }
+  if(t==='cos'){
+    const pw=n=>n===1?T`\cos x`:T`\cos^{${n}}x`;
+    return {g:T`\cos x`,gp:T`-\sin x`,pw,prod:n=>T`-\sin x\,`+pw(n),gf:Math.cos,gpf:x=>-Math.sin(x)};
+  }
+  const pw=n=>n===1?T`\ln x`:T`\left(\ln x\right)^{${n}}`;
+  return {g:T`\ln x`,gp:T`\frac{1}{x}`,pw,prod:n=>T`\frac{${pw(n)}}{x}`,gf:Math.log,gpf:x=>1/x};
+}
+function genGG(n){
+  const K=kindGG(),N=n+1;
+  const ans=T`\frac{${K.pw(N)}}{${N}}`;
+  const wrong=[
+    {tex:K.pw(N),why:'Te faltó dividir entre el nuevo exponente: ∫ uⁿ du = uⁿ⁺¹/(n+1).'},
+    n===1?{tex:T`\frac{${K.pw(3)}}{3}`,why:'El exponente sube solo en 1: ∫ u du = u²/2.'}
+         :{tex:T`\frac{${K.pw(n)}}{${n}}`,why:'El exponente debe subir en 1 antes de dividir: ∫ uⁿ du = uⁿ⁺¹/(n+1).'},
+    n===1?{tex:T`\frac{\left(${K.gp}\right)^{2}}{2}`,why:'Usaste u′ donde debía ir u: el resultado es u²/2, con u la función que se repite dentro del integrando.'}
+         :{tex:T`\frac{${K.pw(N)}}{${n}}`,why:`Dividiste entre ${n}, pero hay que dividir entre el nuevo exponente, ${N}.`}
+  ];
+  return {tex:K.prod(n),correct:ans,wrong,u:K.g,
+    steps:[
+      {t:'Elegimos u y calculamos du',tex:T`u=${K.g},\qquad du=${K.gp}\,dx`},
+      {t:'Reescribimos la integral',tex:n===1?T`\int u\,du`:T`\int u^{${n}}\,du`},
+      {t:'Integramos y volvemos a x',tex:T`\frac{u^{${N}}}{${N}}+C=${ans}+C`}],
+    f:x=>Math.pow(K.gf(x),n)*K.gpf(x),F:x=>Math.pow(K.gf(x),N)/N};
+}
+
+/* ---------- Niveles 3-5: ∫ c·x^{m-1}·h(a·x^m+k) dx ---------- */
+const powOut=n=>({kind:'pow',n,hu:T`u^{${n}}`,Hb:g=>T`\left(${g}\right)^{${n+1}}`,Hc:[1,n+1],Hf:u=>Math.pow(u,n+1),hf:u=>Math.pow(u,n),
+  bad:g=>({b:T`\left(${g}\right)^{${n}}`,c:[1,n],why:'El exponente sube en 1: ∫ uⁿ du = uⁿ⁺¹/(n+1).'})});
+const OUT={
+  sqrt:{kind:'sqrt',hu:T`\sqrt{u}`,Hb:g=>T`\left(${g}\right)^{\frac{3}{2}}`,Hc:[2,3],Hf:u=>Math.pow(u,1.5),hf:Math.sqrt,
+    bad:g=>({b:T`\sqrt{${g}}`,c:[1,1],why:'√u = u^(1/2): al integrar el exponente sube a 3/2 y se divide entre 3/2.'})},
+  exp:{kind:'exp',hu:T`e^{u}`,Hb:g=>T`e^{${g}}`,Hc:[1,1],Hf:Math.exp,hf:Math.exp,
+    bad:g=>({b:T`\frac{e^{${g}}}{${g}}`,c:[1,1],why:'La integral de eᵘ es eᵘ: no se divide entre u.'})},
+  sin:{kind:'sin',hu:T`\sin u`,Hb:g=>T`\cos\left(${g}\right)`,Hc:[-1,1],Hf:Math.cos,hf:Math.sin,
+    bad:g=>({b:T`\cos\left(${g}\right)`,c:[1,1],why:'Cuidado con el signo: ∫ sen u du = −cos u + C.'})},
+  cos:{kind:'cos',hu:T`\cos u`,Hb:g=>T`\sin\left(${g}\right)`,Hc:[1,1],Hf:Math.sin,hf:Math.cos,
+    bad:g=>({b:T`\sin\left(${g}\right)`,c:[-1,1],why:'∫ cos u du = +sen u + C; el signo menos pertenece a ∫ sen u du.'})},
+  inv:{kind:'inv',hu:T`\frac{1}{u}`,Hb:g=>T`\ln\left|${g}\right|`,Hc:[1,1],Hf:u=>Math.log(Math.abs(u)),hf:u=>1/u,
+    bad:g=>({b:T`\frac{1}{\left(${g}\right)^{2}}`,c:[-1,1],why:'Eso se parece a la derivada de 1/u; la integral de 1/u es ln|u|.'})}
+};
+function integrandTex(o,c,m,g){
+  const cx=(c===1?'':String(c))+xm1(m), sp=cx?T`\,`:'';
+  switch(o.kind){
+    case 'inv': return T`\frac{${cx||1}}{${g}}`;
+    case 'sqrt': return T`${cx}${sp}\sqrt{${g}}`;
+    case 'pow': return T`${cx}${sp}\left(${g}\right)^{${o.n}}`;
+    case 'exp': return T`${cx}${sp}e^{${g}}`;
+    case 'sin': return T`${cx}${sp}\sin\left(${g}\right)`;
+    default: return T`${cx}${sp}\cos\left(${g}\right)`;
+  }
+}
+function genGeneric({m,a,c,k,o}){
+  const gT=polyT(a,m,k),am=a*m,K=fr(c,am),Hc=o.Hc,Tt=frMul(K,Hc);
+  const gf=x=>a*Math.pow(x,m)+k;
+  const tex=integrandTex(o,c,m,gT), ans=joinC(Tt,o.Hb(gT));
+  const bw=o.bad(gT);
+  const cands=[
+    {tex:joinC(frMul(K,bw.c),bw.b),why:bw.why},
+    ...shuffle([
+      {co:frMul([c,1],Hc),why:`Falta compensar el factor de du: hay que dividir entre ${am}.`},
+      {co:frMul([c*am,1],Hc),why:`Al despejar dx se divide entre ${am}, no se multiplica.`},
+      {co:frMul([1,am],Hc),why:`Olvidaste el coeficiente ${c} que ya estaba en el integrando.`},
+      {co:frMul([c,a],Hc),why:`La derivada de u es ${am}·x${m>2?'^'+(m-1):''}${m===1?'⁰ (=1)':''}: no olvides multiplicar por el exponente ${m}.`},
+      {co:K,why:'No olvides el factor que aparece al integrar la función externa (el signo o el nuevo exponente).'}
+    ].map(e=>({...e,tex:joinC(e.co,o.Hb(gT)),F:x=>frVal(e.co)*o.Hf(gf(x))})))
+  ];
+  const wrong=[],seen=new Set([ans]);
+  for(const e of cands){ if(!seen.has(e.tex)&&!(e.co&&frEq(e.co,Tt))){seen.add(e.tex);wrong.push(e);} if(wrong.length===3)break; }
+  for(const mul of [[2,1],[1,2],[3,1],[1,3]]){ if(wrong.length===3)break;
+    const co=frMul(Tt,mul),t=joinC(co,o.Hb(gT)); if(!seen.has(t)){seen.add(t);wrong.push({tex:t,why:'Revisa el factor constante que resulta de compensar du.',F:x=>frVal(co)*o.Hf(gf(x))});} }
+  const duT=`${am}${xm1(m)}`;
+  return {tex,correct:ans,wrong,u:gT,
+    steps:[
+      {t:'Elegimos u y calculamos du',tex:T`u=${gT},\qquad du=${duT}\,dx`},
+      {t:'Despejamos lo que sobra',tex:T`${xm1(m)}\,dx=\dfrac{du}{${am}}`},
+      {t:'Reescribimos la integral',tex:T`\int ${tex}\,dx=${joinC(K,T`\int ${o.hu}\,du`)}`},
+      {t:'Integramos y volvemos a x',tex:T`${ans}+C`}],
+    f:x=>c*Math.pow(x,m-1)*o.hf(gf(x)),F:x=>frVal(Tt)*o.Hf(gf(x))};
+}
+const nz=(lo,hi)=>{let k=0;while(k===0)k=rnd(lo,hi);return k;};
+function genL3(){return genGeneric({m:pick([2,3,4]),a:1,c:1,k:nz(-9,9),o:pick([powOut(2),powOut(3),powOut(4),powOut(3),OUT.sqrt])});}
+function genL4(){const o=pick([OUT.exp,OUT.sin,OUT.cos,OUT.inv]);return genGeneric({m:pick([2,3,4]),a:1,c:1,k:o.kind==='inv'?nz(-6,6):rnd(-6,6),o});}
+function genL5(){const o=pick([OUT.exp,OUT.sin,OUT.cos,OUT.inv,powOut(2),powOut(3),OUT.sqrt]);
+  return genGeneric({m:pick([1,2,2,3]),a:rnd(2,5),c:rnd(1,9),k:o.kind==='inv'?nz(-6,6):rnd(-6,6),o});}
+
+/* ---------- Nivel 6: composiciones astutas ---------- */
+function genL6(){
+  const kind=pick(['A','B','C','D','E','F','G']);
+  const st=(u,du,mid,fin)=>[{t:'Elegimos u y calculamos du',tex:T`u=${u},\qquad du=${du}\,dx`},{t:'Reescribimos la integral',tex:mid},{t:'Integramos y volvemos a x',tex:fin}];
+  if(kind==='A'){
+    if(Math.random()<.5) return {tex:T`\cos x\,e^{\sin x}`,correct:T`e^{\sin x}`,u:T`\sin x`,
+      wrong:[{tex:T`e^{\sin x}\cos x`,why:'Eso solo reescribe el integrando: tras sustituir, du absorbe al factor cos x.'},
+             {tex:T`\frac{e^{\sin x}}{\cos x}`,why:'No dividas entre cos x: ese factor ya es parte de du.'},
+             {tex:T`e^{\cos x}`,why:'Confundiste la función interna: aquí u = sen x.'}],
+      steps:st(T`\sin x`,T`\cos x`,T`\int e^{u}\,du`,T`e^{u}+C=e^{\sin x}+C`),
+      f:x=>Math.cos(x)*Math.exp(Math.sin(x)),F:x=>Math.exp(Math.sin(x))};
+    return {tex:T`\sin x\,e^{\cos x}`,correct:T`-e^{\cos x}`,u:T`\cos x`,
+      wrong:[{tex:T`e^{\cos x}`,why:'Cuidado con el signo: du = −sen x dx, así que aparece un signo menos.'},
+             {tex:T`e^{\cos x}\sin x`,why:'Eso solo reescribe el integrando: tras sustituir, du absorbe al factor sen x.'},
+             {tex:T`-e^{\sin x}`,why:'Confundiste la función interna: aquí u = cos x.'}],
+      steps:st(T`\cos x`,T`-\sin x`,T`\int e^{u}(-du)=-\int e^{u}\,du`,T`-e^{u}+C=-e^{\cos x}+C`),
+      f:x=>Math.sin(x)*Math.exp(Math.cos(x)),F:x=>-Math.exp(Math.cos(x))};
+  }
+  if(kind==='B'){
+    const k=nz(-9,9),q=T`e^{x}${sgn(k)}`;
+    return {tex:T`\frac{e^{x}}{${q}}`,correct:T`\ln\left|${q}\right|`,u:q,
+      wrong:[{tex:T`\frac{1}{${q}}`,why:'Eso no es una primitiva: al sustituir queda ∫ du/u.'},
+             {tex:T`e^{x}\ln\left|${q}\right|`,why:'No multipliques: el factor eˣ se convierte en du.'},
+             {tex:T`\ln\left|e^{x}\right|+\ln\left|${Math.abs(k)}\right|`,why:'No se puede separar el logaritmo de una suma.'}],
+      steps:st(q,T`e^{x}`,T`\int \frac{du}{u}`,T`\ln|u|+C=\ln\left|${q}\right|+C`),
+      f:x=>Math.exp(x)/(Math.exp(x)+k),F:x=>Math.log(Math.abs(Math.exp(x)+k))};
+  }
+  if(kind==='C') return {tex:T`\frac{1}{x\ln x}`,correct:T`\ln\left|\ln x\right|`,u:T`\ln x`,
+      wrong:[{tex:T`\ln\left|x\ln x\right|`,why:'Un logaritmo de un producto no es la primitiva; hay que sustituir u = ln x.'},
+             {tex:T`\frac{1}{\ln x}`,why:'Eso no es una primitiva de 1/(x ln x); al sustituir queda ∫ du/u.'},
+             {tex:T`\frac{\left(\ln x\right)^{2}}{2}`,why:'Esa sería la primitiva de (ln x)/x; aquí ln x está en el denominador.'}],
+      steps:st(T`\ln x`,T`\frac{1}{x}`,T`\int \frac{du}{u}`,T`\ln|u|+C=\ln\left|\ln x\right|+C`),
+      f:x=>1/(x*Math.log(x)),F:x=>Math.log(Math.abs(Math.log(x)))};
+  if(kind==='D'){
+    const n=rnd(2,4);
+    return {tex:T`\sec^{2}x\,\tan^{${n}}x`,correct:T`\frac{\tan^{${n+1}}x}{${n+1}}`,u:T`\tan x`,
+      wrong:[{tex:T`\tan^{${n+1}}x`,why:`Falta dividir entre el nuevo exponente, ${n+1}.`},
+             {tex:T`\frac{\tan^{${n}}x}{${n}}`,why:'El exponente debe subir en 1 antes de dividir.'},
+             {tex:T`\frac{\sec^{${n+1}}x}{${n+1}}`,why:'Confundiste u: aquí u = tan x y du = sec²x dx.'}],
+      steps:st(T`\tan x`,T`\sec^{2}x`,T`\int u^{${n}}\,du`,T`\frac{u^{${n+1}}}{${n+1}}+C=\frac{\tan^{${n+1}}x}{${n+1}}+C`),
+      f:x=>Math.pow(Math.tan(x),n)/Math.pow(Math.cos(x),2),F:x=>Math.pow(Math.tan(x),n+1)/(n+1)};
+  }
+  if(kind==='E'){
+    const n=rnd(2,4),e=n-1,cosp=p=>p===1?T`\cos x`:T`\cos^{${p}}x`,den=(e===1?'':String(e))+cosp(e);
+    const ans=T`\frac{1}{${den}}`;
+    return {tex:T`\frac{\sin x}{\cos^{${n}}x}`,correct:ans,u:T`\cos x`,
+      wrong:[{tex:'-'+ans,why:'Cuidado con el signo: du = −sen x dx.'},
+             {tex:T`\frac{1}{${n+1}${cosp(n+1)}}`,why:`Al integrar u^(−${n}) el exponente pasa a −${n-1}, no a −${n+1}.`},
+             {tex:T`\ln\left|\cos x\right|`,why:'El logaritmo aparece solo cuando el exponente es −1.'}],
+      steps:st(T`\cos x`,T`-\sin x`,T`\int \frac{\sin x}{\cos^{${n}}x}dx=-\int u^{-${n}}\,du`,T`-\frac{u^{${1-n}}}{${1-n}}+C=${ans}+C`),
+      f:x=>Math.sin(x)/Math.pow(Math.cos(x),n),F:x=>1/(e*Math.pow(Math.cos(x),e))};
+  }
+  if(kind==='F'){
+    const b=rnd(1,6),c=Math.floor(b*b/4)+rnd(1,5),q=T`x^{2}+${b===1?'':b}x+${c}`;
+    return {tex:T`\frac{2x+${b}}{${q}}`,correct:T`\ln\left|${q}\right|`,u:q,
+      wrong:[{tex:T`\ln\left|2x+${b}\right|`,why:'u es el denominador, no el numerador: el numerador es su derivada.'},
+             {tex:T`\frac{${q}}{2x+${b}}`,why:'No se invierte la fracción: ∫ du/u = ln|u|.'},
+             {tex:T`\ln\left|${q}\right|\cdot\left(2x+${b}\right)`,why:'El factor 2x+'+b+' ya es du; no se multiplica de nuevo.'}],
+      steps:st(q,T`\left(2x+${b}\right)`,T`\int \frac{du}{u}`,T`\ln|u|+C=\ln\left|${q}\right|+C`),
+      f:x=>(2*x+b)/(x*x+b*x+c),F:x=>Math.log(Math.abs(x*x+b*x+c))};
+  }
+  if(Math.random()<.5) return {tex:T`\frac{\sin x}{\cos x}`,correct:T`-\ln\left|\cos x\right|`,u:T`\cos x`,
+      wrong:[{tex:T`\ln\left|\cos x\right|`,why:'Falta el signo: du = −sen x dx.'},
+             {tex:T`-\ln\left|\sin x\right|`,why:'Confundiste u: aquí u = cos x (el denominador).'},
+             {tex:T`\sec x`,why:'Eso corresponde a ∫ sen x / cos²x dx; aquí el denominador es cos x.'}],
+      steps:st(T`\cos x`,T`-\sin x`,T`\int \frac{-du}{u}=-\int \frac{du}{u}`,T`-\ln|u|+C=-\ln\left|\cos x\right|+C`),
+      f:Math.tan,F:x=>-Math.log(Math.abs(Math.cos(x)))};
+  return {tex:T`\frac{\cos x}{\sin x}`,correct:T`\ln\left|\sin x\right|`,u:T`\sin x`,
+      wrong:[{tex:T`-\ln\left|\sin x\right|`,why:'Aquí du = cos x dx (positivo): no hay signo menos.'},
+             {tex:T`\ln\left|\cos x\right|`,why:'Confundiste u: aquí u = sen x (el denominador).'},
+             {tex:T`-\frac{1}{\sin x}`,why:'Eso corresponde a ∫ cos x / sen²x dx; aquí el denominador es sen x.'}],
+      steps:st(T`\sin x`,T`\cos x`,T`\int \frac{du}{u}`,T`\ln|u|+C=\ln\left|\sin x\right|+C`),
+      f:x=>Math.cos(x)/Math.sin(x),F:x=>Math.log(Math.abs(Math.sin(x)))};
+}
+
+function build(level){
+  switch(level){
+    case 1:return genGG(1);
+    case 2:return genGG(rnd(2,4));
+    case 3:return genL3();
+    case 4:return genL4();
+    case 5:return genL5();
+    default:return genL6();
+  }
+}
+function makeExercise(level){
+  for(let i=0;i<40;i++){
+    const ex=build(level);
+    if(ex.wrong.length===3&&new Set([ex.correct,...ex.wrong.map(w=>w.tex)]).size===4){ex.level=level;return ex;}
+  }
+  throw new Error('No se pudo generar ejercicio de nivel '+level);
+}
+/*GEN-END*/
+</script>
+
+<script>
+(function(){
+const LEVELS=[
+ {n:1,name:'Chispa',desc:'Ya viene u′ dentro del integrando: ∫ f(x)·f′(x) dx',ex:String.raw`\int \sin x\cos x\,dx`},
+ {n:2,name:'Potencia',desc:'La regla de la potencia con u′ presente: ∫ uⁿ·u′ dx',ex:String.raw`\int 2x\left(x^{2}+3\right)^{4}dx`},
+ {n:3,name:'Ajuste fino',desc:'Falta una constante y hay que compensar du',ex:String.raw`\int x^{2}\left(x^{3}+1\right)^{3}dx`},
+ {n:4,name:'Disfraces',desc:'La función externa cambia: eᵘ, sen u, cos u, 1/u',ex:String.raw`\int x\,e^{x^{2}}dx`},
+ {n:5,name:'Constantes rebeldes',desc:'Coeficientes que no cuadran y fracciones',ex:String.raw`\int 7x\cos\left(3x^{2}\right)dx`},
+ {n:6,name:'Leyenda',desc:'Composiciones astutas con ln, tan y cocientes de trig',ex:String.raw`\int \frac{1}{x\ln x}dx`}
+];
+const LS='ruta-de-la-u-v1';
+const def=()=>({level:1,streak:0,miss:0,total:0,ok:0,top:1,done:false});
+let S=load();
+function load(){try{return Object.assign(def(),JSON.parse(localStorage.getItem(LS))||{});}catch(e){return def();}}
+function save(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}}
+const $=id=>document.getElementById(id);
+function tex(el,t,display){
+  if(window.katex){try{katex.render(t,el,{displayMode:!!display,throwOnError:false});return;}catch(e){}}
+  el.textContent=t;
+}
+
+/* ---------- Portada ---------- */
+function buildGlyphs(){
+  const g=['∫','u','du','dx','eˣ','sen','ln','π','√','∑','Δ','x²','∞','f′'],box=$('glyphs');
+  for(let i=0;i<24;i++){
+    const s=document.createElement('span');s.className='glyph';s.textContent=pick(g);
+    s.style.left=rnd(0,96)+'%';s.style.fontSize=rnd(28,96)+'px';
+    s.style.animationDuration=rnd(26,60)+'s';s.style.animationDelay='-'+rnd(0,60)+'s';
+    box.appendChild(s);
+  }
+}
+function buildDemo(){
+  const states=[
+    {t:String.raw`\displaystyle\int 2x\cos\left(x^{2}\right)dx`,c:'Una integral que parece complicada…'},
+    {t:String.raw`u=x^{2}\qquad du=2x\,dx`,c:'Elige u y calcula du'},
+    {t:String.raw`\displaystyle\int \cos u\,du`,c:'¡La integral se simplifica!'},
+    {t:String.raw`\sin u+C=\sin\left(x^{2}\right)+C`,c:'Integra y vuelve a x'}
+  ];
+  const demo=$('demo'),dots=[...$('dots').children];let i=0;
+  states.forEach((s,k)=>{const d=document.createElement('div');if(k===0)d.className='on';demo.appendChild(d);tex(d,s.t,false);});
+  $('cap').textContent=states[0].c;
+  setInterval(()=>{
+    i=(i+1)%states.length;
+    [...demo.children].forEach((d,k)=>d.classList.toggle('on',k===i));
+    dots.forEach((d,k)=>d.classList.toggle('on',k===i));
+    $('cap').textContent=states[i].c;
+  },2600);
+}
+function renderRoute(){
+  const ol=$('route');ol.innerHTML='';
+  LEVELS.forEach(L=>{
+    const li=document.createElement('li');
+    const done=S.done||L.n<S.top&&L.n!==S.level, cur=L.n===S.level&&S.total>0;
+    if(done&&!cur)li.className='done';else if(cur)li.className='cur';
+    li.innerHTML=`<div class="num">${done&&!cur?'✓':L.n}</div><h3>${L.name}</h3><p>${L.desc}</p><div class="ex"></div>`;
+    ol.appendChild(li);tex(li.querySelector('.ex'),L.ex,false);
+  });
+  const has=S.total>0;
+  $('start').firstChild.textContent=has?`Continuar en el nivel ${S.level} `:'Comenzar el ascenso ';
+  $('start2').firstChild.textContent=has?`Continuar en el nivel ${S.level} `:'Subir al nivel 1 ';
+  $('fresh').hidden=!has;$('resetTop').hidden=!has;
+}
+
+/* ---------- Práctica ---------- */
+let ex=null,answered=false,hintUsed=false,curLevel=1,lastTex='',pipsOverride=null;
+function hud(){
+  const L=LEVELS[curLevel-1];
+  $('lvN').textContent=L.n;$('lvName').textContent=L.name;$('lvDesc').textContent=L.desc;
+  const k=pipsOverride!==null?pipsOverride:S.streak;
+  [...$('pips').children].forEach((p,i)=>p.classList.toggle('on',i<k));
+  $('stOk').textContent=S.ok;$('stTot').textContent=S.total;
+  const mini=$('mini');mini.innerHTML='';
+  LEVELS.forEach(l=>{const i=document.createElement('i');if(l.n<curLevel)i.className='done';else if(l.n===curLevel)i.className='cur';mini.appendChild(i);});
+}
+function nextEx(){
+  curLevel=S.level;pipsOverride=null;answered=false;hintUsed=false;
+  let tries=0;do{ex=makeExercise(curLevel);tries++;}while(ex.tex===lastTex&&tries<8);
+  lastTex=ex.tex;
+  hud();
+  tex($('problem'),String.raw`\displaystyle\int ${ex.tex}\,dx`,false);
+  $('hint').textContent='';$('fbWrap').innerHTML='';$('nextBtn').hidden=true;$('hintBtn').disabled=false;
+  const opts=shuffle([{tex:ex.correct,ok:true},...ex.wrong.map(w=>({tex:w.tex,ok:false,why:w.why}))]);
+  const box=$('opts');box.innerHTML='';
+  opts.forEach((o,i)=>{
+    const b=document.createElement('button');b.className='opt';b.type='button';
+    b.innerHTML=`<span class="k">${'ABCD'[i]}</span><span class="m"></span>`;
+    box.appendChild(b);tex(b.querySelector('.m'),String.raw`\displaystyle ${o.tex}+C`,false);
+    b.addEventListener('click',()=>choose(o,b,opts));
+    o.el=b;
+  });
+}
+function choose(o,btn,opts){
+  if(answered)return;answered=true;
+  const ok=o.ok;
+  opts.forEach(x=>{x.el.disabled=true;if(x.ok)x.el.classList.add('right');else if(x===o)x.el.classList.add('wrong');else x.el.classList.add('dim');});
+  $('hintBtn').disabled=true;
+  S.total++;if(ok)S.ok++;
+  let msg=null,finished=false;
+  if(ok){
+    S.miss=0;
+    if(!hintUsed){
+      S.streak++;
+      if(S.streak>=3){
+        if(S.level<6){S.level++;S.streak=0;pipsOverride=3;msg={c:'up',t:`⬆ ¡Subes al nivel ${S.level} · ${LEVELS[S.level-1].name}!`};}
+        else{finished=true;S.done=true;S.streak=0;pipsOverride=3;}
+      }
+    }
+  }else{
+    S.streak=0;S.miss++;
+    if(S.miss>=2&&S.level>1){S.level--;S.miss=0;msg={c:'down',t:`⬇ Bajamos al nivel ${S.level} · ${LEVELS[S.level-1].name} para afianzar. ¡Vas a volver a subir!`};}
+  }
+  S.top=Math.max(S.top,S.level);save();hud();
+  const fb=document.createElement('div');fb.className='fb '+(ok?'good':'bad');
+  fb.innerHTML=`<h3>${ok?(hintUsed?'¡Correcto! (con pista)':'¡Correcto!'):'No es esa'}</h3>${ok?'':`<p class="why"></p>`}<ol></ol>${msg?`<div class="lvl ${msg.c}">${msg.t}</div>`:''}`;
+  if(!ok)fb.querySelector('.why').textContent=o.why;
+  const ol=fb.querySelector('ol');
+  ex.steps.forEach(s=>{const li=document.createElement('li');li.innerHTML=`<span class="st">${s.t}</span><div class="stm"></div>`;ol.appendChild(li);tex(li.querySelector('.stm'),String.raw`\displaystyle ${s.tex}`,false);});
+  $('fbWrap').innerHTML='';$('fbWrap').appendChild(fb);
+  const nb=$('nextBtn');nb.hidden=false;nb.focus({preventScroll:true});
+  fb.scrollIntoView({behavior:'smooth',block:'nearest'});
+  if(msg)toast(msg.t);
+  if(finished)setTimeout(finale,900);
+}
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>e.classList.remove('show'),2600);}
+function confetti(){
+  const cols=['#ffb454','#ff6b9a','#6ee7d8','#b794ff','#4ade80','#fff'];
+  for(let i=0;i<90;i++){const d=document.createElement('div');d.className='conf';
+    d.style.left=rnd(0,100)+'vw';d.style.background=pick(cols);d.style.animationDuration=(2.2+Math.random()*2.5)+'s';d.style.animationDelay=(Math.random()*.8)+'s';
+    document.body.appendChild(d);setTimeout(()=>d.remove(),5800);}
+}
+function finale(){$('finale').hidden=false;confetti();}
+function show(game){
+  $('landing').hidden=game;$('gameView').hidden=!game;window.scrollTo(0,0);
+  if(game){nextEx();}else{renderRoute();}
+}
+function pick(a){return a[rnd(0,a.length-1)];}
+
+/* ---------- Eventos ---------- */
+$('start').onclick=$('start2').onclick=()=>show(true);
+$('home').onclick=()=>show(false);
+$('nextBtn').onclick=nextEx;
+$('hintBtn').onclick=()=>{if(answered)return;hintUsed=true;$('hint').innerHTML='Prueba con <span id="hu"></span>';tex($('hu'),String.raw`u=${ex.u}`,false);};
+const reset=()=>{if(confirm('¿Borrar tu progreso y empezar desde el nivel 1?')){S=def();save();renderRoute();}};
+$('fresh').onclick=$('resetTop').onclick=reset;
+$('keep').onclick=()=>{$('finale').hidden=true;nextEx();};
+$('goHome').onclick=()=>{$('finale').hidden=true;show(false);};
+document.addEventListener('keydown',e=>{
+  if($('gameView').hidden||!$('finale').hidden)return;
+  const k=e.key.toLowerCase(),idx='1234'.indexOf(k)>=0?'1234'.indexOf(k):'abcd'.indexOf(k);
+  if(!answered&&idx>=0&&idx<4&&k.length===1){const b=$('opts').children[idx];if(b)b.click();}
+  else if(answered&&(e.key==='Enter')&&document.activeElement!==$('nextBtn')){e.preventDefault();nextEx();}
+});
+
+document.addEventListener('DOMContentLoaded',()=>{buildGlyphs();buildDemo();renderRoute();});
+})();
+</script>
+<noscript><p style="padding:20px;text-align:center">Esta práctica necesita JavaScript activado.</p></noscript>
+</body>
+</html>
